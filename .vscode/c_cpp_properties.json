@@ -1,0 +1,39 @@
+{
+    "configurations": [
+        {
+            "name": "empty_project",
+            "includePath": [
+                "${workspaceFolder}/device/ch32v307/core//**",
+                "${workspaceFolder}/device/ch32v307/peripheral/inc//**",
+                "${workspaceFolder}/source/low_level/ch32v307//**",
+                "${workspaceFolder}/source/low_level/ch32v307/debug//**"
+            ],
+            "defines": [],
+            "intelliSenseMode": "gcc-arm",
+            "compilerPath": "C:/RISC-V/CH32/RISC-V Embedded GCC15/bin/riscv32-wch-elf-gcc.exe",
+            "compilerArgs": [
+                "-march=rv32imac",
+                "-mabi=ilp32",
+                "-msmall-data-limit=8",
+                "-msave-restore",
+                "-mtune=size",
+                "-g3",
+                "-Os",
+                "-std=gnu11",
+                "-Idevice/ch32v307/core/",
+                "-Idevice/ch32v307/peripheral/inc/",
+                "-Isource/low_level/ch32v307/",
+                "-Isource/low_level/ch32v307/debug/",
+                "-fmessage-length=0",
+                "-fsigned-char",
+                "-ffunction-sections",
+                "-fdata-sections",
+                "-fno-common",
+                "-Wunused",
+                "-Wuninitialized"
+            ],
+            "cStandard": "gnu11"
+        }
+    ],
+    "version": 4
+}

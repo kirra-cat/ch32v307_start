@@ -1,0 +1,28 @@
+﻿{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Cortex Debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "build/empty_project.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "gdbPath": "C:/RISC-V/CH32/RISC-V Embedded GCC15/bin/riscv32-wch-elf-gdb.exe",
+            "servertype": "openocd",
+            "serverArgs": [
+                "-d3"
+            ],
+            "serverpath": "C:/RISC-V/CH32/OpenOCD/bin/openocd.exe",
+            "configFiles": [
+                "C:/RISC-V/CH32/OpenOCD/share/openocd/scripts/interface/wch-riscv.cfg"
+            ],
+            "svdFile": "device/ch32v307/svd/CH32V307xx.svd",
+            "liveWatch": {
+                "enabled": false
+            },
+            "preLaunchTask": "Run All Tasks",
+            "runToEntryPoint": "main",
+            "postDebugTask": "Monitor resume"
+        }
+    ]
+}

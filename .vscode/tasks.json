@@ -1,0 +1,90 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Project",
+            "type": "shell",
+            "command": "make -j12 all",
+            "icon": {
+                "color": "terminal.ansiYellow",
+                "id": "tools"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "clear": true
+            },
+            "detail": "Build Project"
+        },
+        {
+            "label": "Clean Project",
+            "type": "shell",
+            "command": "make -j4 clean",
+            "problemMatcher": [],
+            "icon": {
+                "color": "terminal.ansiRed",
+                "id": "trash"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "clear": true
+            },
+            "detail": "Clean Project"
+        },
+        {
+            "label": "Makefile: Update JSON files",
+            "type": "shell",
+            "command": "make update-json",
+            "icon": {
+                "color": "terminal.ansiCyan",
+                "id": "json"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "clear": true
+            },
+            "detail": "Update JSON files from Makefile"
+        },
+        {
+            "label": "Monitor resume",
+            "type": "shell",
+            "command": "make resume",
+            "icon": {
+                "color": "terminal.ansiGreen",
+                "id": "vscode"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "clear": true
+            },
+            "detail": "Monitor resume"
+        },
+        {
+            "label": "Run All Tasks",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Build Project"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Run All Tasks"
+        }
+    ]
+}
