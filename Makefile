@@ -10,8 +10,8 @@ TARGET = empty_project
 ###############################################################################
 
 ifeq ($(OS), Windows_NT)
-	# remove cmd
-	RM = if exist $(BUILD_PATH) rmdir /S /Q
+	# Number Logical Processors
+	CPU_THREADS := $(shell powershell "wmic cpu get NumberOfLogicalProcessors | findstr /r [0-9]")
 
 	# RISC-V Toolchain
 	GNU_TOOLCHAIN = C:/RISC-V/CH32/RISC-V Embedded GCC15/bin
@@ -30,7 +30,7 @@ ifeq ($(OS), Windows_NT)
 	#Python
 	PYTHON = python
 else
-	RM = rm -rf
+	CPU_THREADS := $(shell nproc 2>/dev/null || echo 4)
 
 	GNU_TOOLCHAIN = 
 	GNU_TOOLCHAIN_GCC_PATH = 
@@ -175,11 +175,11 @@ endif
 PREFIX = riscv32-wch-elf-
 
 ifdef GNU_TOOLCHAIN
-	CC = $(GNU_TOOLCHAIN)/$(PREFIX)gcc
-	AS = $(GNU_TOOLCHAIN)/$(PREFIX)gcc -x assembler-with-cpp
-	CP = $(GNU_TOOLCHAIN)/$(PREFIX)objcopy
-	SZ = $(GNU_TOOLCHAIN)/$(PREFIX)size
-	OBJDUMP = $(GNU_TOOLCHAIN)/$(PREFIX)objdump
+	CC = "$(GNU_TOOLCHAIN)/$(PREFIX)gcc"
+	AS = "$(GNU_TOOLCHAIN)/$(PREFIX)gcc" -x assembler-with-cpp
+	CP = "$(GNU_TOOLCHAIN)/$(PREFIX)objcopy"
+	SZ = "$(GNU_TOOLCHAIN)/$(PREFIX)size"
+	OBJDUMP = "$(GNU_TOOLCHAIN)/$(PREFIX)objdump"
 else
 	CC = $(PREFIX)gcc
 	AS = $(PREFIX)gcc -x assembler-with-cpp
@@ -250,26 +250,30 @@ $(BUILD_PATH):
 ###############################################################################
 
 clean:
-	$(RM) $(BUILD_PATH)
+ifeq ($(OS), Windows_NT)
+	powershell -Command "if (Test-Path '$(BUILD_PATH)') { Remove-Item -Path '$(BUILD_PATH)' -Recurse -Force }"
+else
+	rm -rf $(BUILD_PATH)
+endif
 
 ###############################################################################
 # update VSCode JSON configuration files
 ###############################################################################
 update-json:
 	$(PYTHON) .vscode/scripts/update_json_config.py \
-		--target "$(TARGET)" \
-		--build-dir "$(BUILD_PATH)" \
-		--includes "$(C_INCLUDES)" \
-		--defs "$(C_DEFS)" \
-		--gcc-path "$(GNU_TOOLCHAIN_GCC_PATH)" \
-		--cflags "$(C_FLAGS_BASE)" \
-		--gdb-path "$(GNU_TOOLCHAIN_GDB_PATH)" \
-		--openocd-bin "$(OPENOCD_PATH_BIN)" \
-		--openocd-interface "$(OPENOCD_INTERFACE_PATH)" \
-		--openocd-target "$(OPENOCD_TARGET_PATH)" \
-		--svd-file "$(SVD_FILE_PATH)" \
-		--size-path "$(GNU_TOOLCHAIN_SIZE_PATH)" \
-		--processor-count $(shell nproc 2>/dev/null || echo 4)
+		--target '$(TARGET)' \
+		--build-dir '$(BUILD_PATH)' \
+		--includes '$(C_INCLUDES)' \
+		--defs '$(C_DEFS)' \
+		--gcc-path '$(GNU_TOOLCHAIN_GCC_PATH)' \
+		--cflags '$(C_FLAGS_BASE)' \
+		--gdb-path '$(GNU_TOOLCHAIN_GDB_PATH)' \
+		--openocd-bin '$(OPENOCD_PATH_BIN)' \
+		--openocd-interface '$(OPENOCD_INTERFACE_PATH)' \
+		--openocd-target '$(OPENOCD_TARGET_PATH)' \
+		--svd-file '$(SVD_FILE_PATH)' \
+		--size-path '$(GNU_TOOLCHAIN_SIZE_PATH)' \
+		--processor-count $(CPU_THREADS)
 
 ###############################################################################
 # OpenOCD actions

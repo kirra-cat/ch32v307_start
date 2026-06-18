@@ -39,7 +39,6 @@ def update_json_file(path, updater):
         print(f"Updated {path}")
 
 def update_c_cpp_properties(data, args):
-    # ищем конфигурацию (первую)
     if not data.get("configurations"):
         return False
     cfg = data["configurations"][0]
@@ -61,7 +60,7 @@ def update_c_cpp_properties(data, args):
     if cfg.get("compilerPath") != args.gcc_path:
         cfg["compilerPath"] = args.gcc_path
         changed = True
-    # compilerArgs – лучше взять как список, но у нас cflags – строка с пробелами
+    # compilerArgs
     cflags_list = split_args(args.cflags)
     if cfg.get("compilerArgs") != cflags_list:
         cfg["compilerArgs"] = cflags_list
@@ -69,7 +68,6 @@ def update_c_cpp_properties(data, args):
     return changed
 
 def update_launch(data, args):
-    # предполагаем одну конфигурацию
     if not data.get("configurations"):
         return False
     cfg = data["configurations"][0]
@@ -107,8 +105,6 @@ def update_tasks(data, args):
         # Обновляем пути в задаче Build Analyzer
         if label == "Build Analyzer":
             args_list = task.get("args", [])
-            # ищем позиции, где лежат .elf и .map – обычно это 4-й и 5-й аргументы
-            # но для надёжности найдём по расширению
             new_args = []
             for arg in args_list:
                 if arg.endswith(".elf"):
@@ -120,10 +116,9 @@ def update_tasks(data, args):
             if args_list != new_args:
                 task["args"] = new_args
                 changed = True
-        # Обновляем -j в командах
+                
         cmd = task.get("command", "")
         if isinstance(cmd, str) and " -j" in cmd:
-            # заменим -j<цифры> на -j{processor_count}
             new_cmd = re.sub(r'-j\s*\d+', f'-j{args.processor_count}', cmd)
             if new_cmd != cmd:
                 task["command"] = new_cmd
@@ -132,7 +127,6 @@ def update_tasks(data, args):
 
 def main():
     args = parse_args()
-    # Если processor_count не задан, получить из окружения или использовать 1
     if args.processor_count == 0:
         import os
         args.processor_count = os.cpu_count() or 1

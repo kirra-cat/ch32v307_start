@@ -1,10 +1,10 @@
-{
+﻿{
     "version": "2.0.0",
     "tasks": [
         {
             "label": "Build Project",
             "type": "shell",
-            "command": "make -j12 all",
+            "command": "make -j20 all",
             "icon": {
                 "color": "terminal.ansiYellow",
                 "id": "tools"
@@ -22,7 +22,7 @@
         {
             "label": "Clean Project",
             "type": "shell",
-            "command": "make -j4 clean",
+            "command": "make -j20 clean",
             "problemMatcher": [],
             "icon": {
                 "color": "terminal.ansiRed",
